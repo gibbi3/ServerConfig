@@ -1,8 +1,10 @@
 # Linux Server Configuration
-
+```
 IP 52.32.235.31
 URL: http://52.32.235.31
 grader passwd: 'password'
+```
+[Bellagora](http://52.32.235.31)
 
 ## Project Requirements
 
@@ -30,10 +32,11 @@ $ sudo adduser grader
 $ sudo visudo
 
 Inserted:
+```
   'grader ALL=(ALL:ALL) ALL' in User privilege specification.
   ',timestamp_timeout=3,tty_tickets' after 'env_reset' to ensure prompts
   for passwords for grader usage of sudo.
-
+```
 ## Update currently installed packages
 
 $ sudo apt-get update
@@ -44,15 +47,21 @@ $ sudo apt-get upgrade
 $ sudo vim /etc/ssh/sshd_config
 
   Changed:
+  ```
   Port: 20 to Port 2200
-
+  ```
 ## Configuring the uncomplicated firewall
 
 $ sudo ufw default deny incoming
+
 $ sudo ufw default allow outgoing
+
 $ sudo ufw allow 2200/tcp
+
 $ sudo ufw allow www
+
 $ sudo ufw allow ntp
+
 $ sudo ufw enable
 
 ## Configuring local timezone
@@ -65,57 +74,77 @@ Selected:
 ## Install and configure Apache and mod_wsgi
 
 $ sudo apt-get install apache2
+
 $ sudo apt-get install libapache2-mod-wsgi.
 
 $ sudo vim /etc/apache2/sites-enabled/000-default.conf
+
   Added:
+  ```
   "WSGIScriptAlias / /var/www/html/bellagora.wsgi"
   immediately before closing tag (wsgi file to be created later)
-
+   ```
 ## Install and configure PostgreSQL, creating user 'catalog'
 
 sudo apt-get install postgresql
+
 sudo -i -u postgres
+
 $ psql
   In Postgres:
+  ```
   # CREATE USER catalog;
   # ALTER USER catalog WITH PASSWORD udacity2017;
   # CREATE DATABASE stock;
-
+   ```
 $ cat /etc/postgresql/9.3/main/pg_hba.conf
+
   Not accepting remote connections.
 
 ## Setting up Catalog App project
 
 $ sudo apt-get install git
+
 $ sudo apt-get install python-pip
+
 $ pip install virtualenv
 
 $ cd /var/www
+
 $ virtualenv bellagora
+
 $ cd bellagora
 
-Repository "Bellagora" cloned into bellagora virtual environment
+Repository "Bellagora" cloned into bellagora virtual environment. 
+Virtual environment activated for the installation of required packages for application:
 
 $ source bin/activate
+
 $ sudo apt-get install python-dev
+
 $ sudo apt-get install libpq-dev
+
 $ sudo apt-get install python-psycopg2
+
 $ pip install -r requirements.txt
+
 $ deactivate
 
 Database's name changed in files app.py, database_setup.py, and testdb.py.
 While editing app.py, client_secrets.json and fb_client_secrets.json were
 extended to their full paths.
+```
   /var/www/bellagora/bellagora/client_secrets.json
   /var/www/bellagora/bellagora/fb_client_secrets.json
-
+```
 $ python database_setup.py
+
 $ python testdb.py
 
 $ sudo vim /etc/apache2/sites-available/Bellagora.conf
 
 Added:
+```
   <VirtualHost 'asterisk':80>
     ServerName 52.32.235.31
     ServerAdmin gibbirdsong@gmail.com
@@ -133,10 +162,13 @@ Added:
     LogLevel warn
     CustomLog ${APACHE_LOG_DIR}/access.log combined
   </VirtualHost>
+```
+Creating an wsgi file for catalog application:
 
 $ sudo vim /var/www/bellagora/bellagora.wsgi
 
 Added:
+```
   #!/usr/bin/python
   import sys
   import logging
@@ -145,6 +177,7 @@ Added:
 
   from app import app as application
   application.secret_key = 'everythingallthetime'
+```
 
 $ sudo a2ensite Bellagora
 
@@ -157,34 +190,55 @@ To eliminate warning "unable to resolve host":
 $ sudo vim etc/hosts
 
 Added:
+  ```
   127.0.0.1 ip-10-20-15-236
+  ```
 
 To force ssh key based authentication:
 
 $ sudo vim /etc/ssh/sshd_config
 
 Confirmed:
+```
   PasswordAuthentication set to 'no'
+```
 
 To disable remote login of root:
 
 $ sudo vim /etc/ssh/sshd_config
 
 Changed:
+```
   PermitRootLogin: 'withoutpassword' --> 'no'
-Added:
+ ```
+Inserted:
+```
   AllowUsers grader
-
+```
 ## Sources:
 
 Disabling remote logging of root:
+```
 https://www.a2hosting.com/kb/getting-started-guide/accessing-your-account/disabling-ssh-logins-for-root
+```
 Setting up a wsgi file:
+```
 http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/
+```
 Setting up PostgreSQL:
+```
 http://www.techrepublic.com/blog/diy-it-guy/diy-a-postgresql-database-server-setup-anyone-can-handle/
+```
 Working with Flask and Apache:
+```
 https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+```
 Setting timestamp_timeout for sudoers:
+```
 http://askubuntu.com/questions/153933/no-password-prompt-at-sudo-command
+```
 And of course, the Udacity course material was heavily referenced.
+
+```
+https://classroom.udacity.com/nanodegrees/nd004/parts/00413454014/modules/357367901175461/lessons/4378692847/concepts/48114089370923#
+```
