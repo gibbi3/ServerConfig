@@ -1,6 +1,7 @@
 # Linux Server Configuration
 ```
-IP 52.32.235.31
+IP: 52.32.235.31
+SSH: 2200
 URL: http://52.32.235.31
 grader passwd: 'Udacity2017'
 ```
