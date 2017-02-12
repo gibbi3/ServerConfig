@@ -2,7 +2,7 @@
 ```
 IP 52.32.235.31
 URL: http://52.32.235.31
-grader passwd: 'password'
+grader passwd: 'Udacity2017'
 ```
 [Bellagora](http://52.32.235.31)
 
