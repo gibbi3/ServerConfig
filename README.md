@@ -86,9 +86,9 @@ $ sudo vim /etc/apache2/sites-enabled/000-default.conf
    ```
 ## Install and configure PostgreSQL, creating user 'catalog'
 
-sudo apt-get install postgresql
+$ sudo apt-get install postgresql
 
-sudo -i -u postgres
+$ sudo -i -u postgres
 
 $ psql
   In Postgres:
@@ -131,8 +131,9 @@ $ pip install -r requirements.txt
 $ deactivate
 
 Database's name changed in files app.py, database_setup.py, and testdb.py.
+
 While editing app.py, client_secrets.json and fb_client_secrets.json were
-extended to their full paths.
+extended to their full paths:
 ```
   /var/www/bellagora/bellagora/client_secrets.json
   /var/www/bellagora/bellagora/fb_client_secrets.json
